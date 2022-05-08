@@ -1,0 +1,6 @@
+[submodule "submodules/make-shadings-r-util"]
+	path = submodules/make-shadings-r-util
+	url = https://github.com/osubera/make-shadings-r-util.git
+[submodule "submodules/do-call-with-par-r-util"]
+	path = submodules/do-call-with-par-r-util
+	url = https://github.com/osubera/do-call-with-par-r-util.git
