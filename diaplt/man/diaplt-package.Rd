@@ -21,7 +21,7 @@ This package contains beadsplot function.
 Maintainer: \packageMaintainer{diaplt}
 }
 \references{
-Beads Summary Plot of Ranges: \url{http://tomizonor.wordpress.com/2013/11/12/beads-plot/}
+Beads Summary Plot of Ranges: \url{https://tomizonor.wordpress.com/2013/11/12/beads-plot/}
 }
 \keyword{ package }
 \keyword{ hplot }
