@@ -1,8 +1,8 @@
 Package: diaplt
 Type: Package
 Title: Beads Summary Plot of Ranges
-Version: 1.0.1
-Date: 2013-10-24
+Version: 1.2.0
+Date: 2013-11-11
 Author: Shinichiro Tomizono
 Maintainer: Shinichiro Tomizono <cowares@gmail.com>
 Description: Visualize one-factor data frame. 
@@ -12,4 +12,4 @@ Description: Visualize one-factor data frame.
 License: MIT + file LICENSE
 License_is_FOSS: yes
 License_restricts_use: no
-Packaged: 2013-10-24 22:54:12 UTC; macomini
+Packaged: 2013-11-12 12:50:25 UTC; macomini

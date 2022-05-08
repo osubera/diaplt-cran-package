@@ -33,6 +33,7 @@
 #                 default=lwd, same width as border 
 #   legend = logical, default=TRUE, to draw legend
 #   label.factor = logical, default=TRUE, to draw labels of factor
+#                  character vector, as alternative labels
 #   label.range = logical, default=TRUE, to draw range value of series
 #   drift.label.factor = numeric vector, (value, cycle),
 #                        give small drifts on factor label location,
@@ -57,8 +58,8 @@
 #   x = numeric vector, single observations
 
 # beadsplot.character(
-#   index = character, single observations
-#   x = data.frame, contains a factor and observations
+#   x = character, column name of factor
+#   data = data.frame, contains a factor and observations
 
 # beadsplot.formula(
 #   formula = formula, a model formula, ex. factor~obs1+obs2+obs3
@@ -116,12 +117,15 @@ beadsplot.data.frame <- function(x, index=NULL, horizontal=FALSE,
   if(verbose) print(stats)
  
   if(plot) {
-    plt.beads(stats, scale, horizontal, bw, col, 
-              shading, shading.angle, lwd, lwd.center, 
-              legend, label.factor, label.range, 
-              drift.label.factor, drift.label.range, 
-              sheer, summary.labels,
-              verbose, ...)
+    plt.beads(stats=stats, scale=scale, 
+              horizontal=horizontal, bw=bw, col=col, 
+              shading=shading, shading.angle=shading.angle, 
+              lwd=lwd, lwd.center=lwd.center, legend=legend, 
+              label.factor=label.factor, label.range=label.range, 
+              drift.label.factor=drift.label.factor, 
+              drift.label.range=drift.label.range, 
+              sheer=sheer, summary.labels=summary.labels,
+              verbose=verbose, ...)
     invisible(stats)
   } else {
     stats
@@ -136,13 +140,17 @@ beadsplot.numeric <- function(x, index=NULL, horizontal=FALSE,
                S=min, E=mean, N=max, summary.labels=NULL,
                plot=TRUE, verbose=FALSE, ...) {
   beadsplot.data.frame(data.frame(x),
-    index, horizontal, col, sheer, shading, shading.angle,
-    bw, lwd, lwd.center, legend, label.factor, label.range,
-    drift.label.factor, drift.label.range, S, E, N, summary.labels,
-    plot, verbose)
+    index=index, horizontal=horizontal, col=col, sheer=sheer, 
+    shading=shading, shading.angle=shading.angle,
+    bw=bw, lwd=lwd, lwd.center=lwd.center, legend=legend, 
+    label.factor=label.factor, label.range=label.range,
+    drift.label.factor=drift.label.factor, 
+    drift.label.range=drift.label.range, 
+    S=S, E=E, N=N, summary.labels=summary.labels,
+    plot=plot, verbose=verbose, ...)
 }
 
-beadsplot.character <- function(index, x, horizontal=FALSE,
+beadsplot.character <- function(x, data, horizontal=FALSE,
                col=NULL, sheer=NULL, shading=NA, shading.angle=NA,
                bw=0.2, lwd=1, lwd.center=lwd, 
                legend=TRUE, label.factor=TRUE, label.range=TRUE, 
@@ -150,14 +158,18 @@ beadsplot.character <- function(index, x, horizontal=FALSE,
                S=min, E=mean, N=max, summary.labels=NULL,
                plot=TRUE, verbose=FALSE, ...) {
   # convert column name to column number to use - operator
-  column <- which(names(x) == index)
-  if(length(column) == 0) column <- as.numeric(index)
+  column <- which(names(data) == x)
+  if(length(column) == 0) column <- as.numeric(x)
   
-  beadsplot.data.frame(x[- column],
-    x[,column], horizontal, col, sheer, shading, shading.angle,
-    bw, lwd, lwd.center, legend, label.factor, label.range,
-    drift.label.factor, drift.label.range, S, E, N, summary.labels,
-    plot, verbose)
+  beadsplot.data.frame(data[- column], index=data[,column], 
+    horizontal=horizontal, col=col, sheer=sheer, 
+    shading=shading, shading.angle=shading.angle,
+    bw=bw, lwd=lwd, lwd.center=lwd.center, legend=legend, 
+    label.factor=label.factor, label.range=label.range,
+    drift.label.factor=drift.label.factor, 
+    drift.label.range=drift.label.range, 
+    S=S, E=E, N=N, summary.labels=summary.labels,
+    plot=plot, verbose=verbose, ...)
 }
 
 beadsplot.formula <- function(formula, data, horizontal=FALSE,
@@ -171,11 +183,15 @@ beadsplot.formula <- function(formula, data, horizontal=FALSE,
   # with the 1st column as factor, and the 2nd- as observations
   x <- model.frame(formula, data=data)
   
-  beadsplot.data.frame(x[-1],
-    x[1], horizontal, col, sheer, shading, shading.angle,
-    bw, lwd, lwd.center, legend, label.factor, label.range,
-    drift.label.factor, drift.label.range, S, E, N, summary.labels,
-    plot, verbose)
+  beadsplot.data.frame(x[-1], index=x[1], 
+    horizontal=horizontal, col=col, sheer=sheer, 
+    shading=shading, shading.angle=shading.angle,
+    bw=bw, lwd=lwd, lwd.center=lwd.center, legend=legend, 
+    label.factor=label.factor, label.range=label.range,
+    drift.label.factor=drift.label.factor, 
+    drift.label.range=drift.label.range, 
+    S=S, E=E, N=N, summary.labels=summary.labels,
+    plot=plot, verbose=verbose, ...)
 }
 
 beadsplot.default <- beadsplot.data.frame
@@ -226,16 +242,18 @@ calc.stats <- function(stats, x, index, S, E, N,
   stats
 }
 
-scale.stats.range <- function(stats, zoom=2, mid=0) {
+scale.stats.range <- function(stats, zoom=2, mid=0, centers=NULL) {
   lseries <- as.list(1L:dim(stats)['series'])
   whole.range <- sapply(lseries, 
                         function(series) range(stats[series,,c('S','N')]))
   if(is.null(mid)) {
     mid <- 0
     whole.mean <- apply(whole.range, 2, mean)
-  } else {
+  } else if(is.null(centers)) {
     whole.mean <- sapply(lseries, 
                          function(series) mean(stats[series,,'E']))
+  } else {
+    whole.mean <- centers
   }
   scale.stats.any(stats, zoom, mid, whole.range, whole.mean)
 }
@@ -261,7 +279,8 @@ scale.stats <- function(stats, x, index, scale=make.scale()) {
 
   if(is.null(scale$scale.data.border)) {
     if(!is.null(zoom))
-      stats <- scale.stats.range(stats, zoom, mid)
+      stats <- scale.stats.range(stats, zoom, mid,
+                                 scale$scale.data.center)
   } else {
     if(is.null(zoom)) zoom <- 2
     if(is.null(mid)) mid <- 0
@@ -346,11 +365,11 @@ make.scale <- function(...) {
 
   scale <- modifyList(scale.init, list(...))
 
-  if(is.na(scale$scale.grid.center)) {
+  if(!is.null(scale$scale.grid.center) && is.na(scale$scale.grid.center)) {
     scale$scale.grid.center <- 
       if(is.null(scale$scale.mean)) NULL else color.default
   }
-  if(is.na(scale$scale.grid.border)) { 
+  if(!is.null(scale$scale.grid.border) && is.na(scale$scale.grid.border)) { 
     scale$scale.grid.border <- 
       if(is.null(scale$scale.range)) NULL else color.default
   }
@@ -375,17 +394,27 @@ calc.drifts <- function(scaled, series,
 
   if(label.factor) {
     rank.f <- order(order(scaled[series,,'E']))
-    drift.f <- rank.f %% drift.label.factor[2] * drift.label.factor[1]
-    drift.f[is.nan(drift.f) | is.na(drift.f)] <- 0
-    drifts$f <- drift.f
+    drifts$f <- calc.drifts.vector(rank.f, drift.label.factor)
   }
   if(label.range) {
-    drift.r <- series %% drift.label.range[2] * drift.label.range[1]
-    if(is.nan(drift.r) || is.na(drift.r)) drift.r <- 0
-    drifts$r <- drift.r
+    drifts$r <- calc.drifts.vector(series, drift.label.range)
   }
 
   drifts
+}
+
+calc.drifts.vector <- function(data, seed) {
+  if(is.null(seed)) seed <- NA
+  s1 <- seed[1]
+  s2 <- seed[2]
+  drift <-
+    if(is.na(s2)) {
+      rep(s1, length(data))
+    } else {
+      data %% s2 * s1
+    }
+  drift[is.nan(drift) | is.na(drift)] <- 0
+  drift
 }
 
 make.colors <- function(n, col=NULL, sheer=NULL) {

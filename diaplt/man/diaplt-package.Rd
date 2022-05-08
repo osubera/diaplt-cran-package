@@ -3,38 +3,37 @@
 \alias{diaplt}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+Beads Summary Plot
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+Visualize one-factor data frame.  Look over a data frame
+with many numeric columns and a factor column.
+Beads plot consists of diamonds of each factor of each 
+data series.  A diamond indicates average and range.
 }
 \details{
 \tabular{ll}{
 Package: \tab diaplt\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-10-20\cr
-License: \tab What license is it under?\cr
+Version: \tab 1.2.0\cr
+Date: \tab 2013-11-11\cr
+License: \tab MIT | \href{http://paidforeveryone.wordpress.com}{paid4e}: Copyright (c) 2013, Shinichiro Tomizono\cr
 }
-~~ An overview of how to use the package, including the most ~~
-~~ important functions ~~
+This package contains beadsplot function.
 }
 \author{
-Who wrote it
+Shinichiro Tomizono
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: Shinichiro Tomizono <cowares@gmail.com>
 }
 \references{
-~~ Literature or other references for background information ~~
+Beads Summary Plot of Ranges: \url{http://tomizonor.wordpress.com/2013/11/12/beads-plot/}
 }
 \keyword{ package }
+\keyword{ hplot }
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+  \code{\link{beadsplot}}.
 }
 \examples{
-# ~~ simple examples of the most important functions ~~
+beadsplot(Species~., iris)
 }
