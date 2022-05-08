@@ -5,7 +5,6 @@
 \alias{beadsplot.numeric}
 \alias{beadsplot.character}
 \alias{beadsplot.formula}
-\alias{range}
 \title{
 Beads Summary Plot
 }

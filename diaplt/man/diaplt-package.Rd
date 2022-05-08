@@ -15,8 +15,8 @@ data series.  A diamond indicates average and range.
 \tabular{ll}{
 Package: \tab diaplt\cr
 Type: \tab Package\cr
-Version: \tab 1.2.0\cr
-Date: \tab 2013-11-11\cr
+Version: \tab 1.2.1\cr
+Date: \tab 2013-11-12\cr
 License: \tab MIT | \href{http://paidforeveryone.wordpress.com}{paid4e}: Copyright (c) 2013, Shinichiro Tomizono\cr
 }
 This package contains beadsplot function.
